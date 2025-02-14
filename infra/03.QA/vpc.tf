@@ -1,7 +1,7 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "finalproject-vpc"
+  name = "vpc-${var.project_name}-${var.env}"
   cidr = var.vpc_cidr
 
   azs             = [for i in range(var.az_count) : "${var.region}${["a", "b", "c", "d"][i]}"]
@@ -15,9 +15,11 @@ module "vpc" {
 
   public_subnet_tags = {
     "kubernetes.io/role/elb" = "1"
+    # "karpenter.sh/discovery" = "${var.eks_name}-${var.env}-test"
   }
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = "1"
+    # "karpenter.sh/discovery" = "${var.eks_name}-${var.env}-test"
   }
 
   tags = {
