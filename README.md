@@ -1,6 +1,7 @@
 # terraform_finalpj
+```
 $ tree terraform
-</terraform
+terraform
 |-- 00.terraform-backend
 |   |-- backend.tf
 |   |-- outputs.tf
@@ -45,4 +46,4 @@ $ tree terraform
 |   |-- lambda
 |   `-- s3
 `-- README.md
-/>
+```
