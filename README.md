@@ -1,6 +1,5 @@
 # terraform_finalpj
 ```
-$ tree terraform
 terraform
 |-- 00.terraform-backend
 |   |-- backend.tf
