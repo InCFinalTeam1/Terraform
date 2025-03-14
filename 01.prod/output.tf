@@ -20,3 +20,8 @@ output "bastionHost_sg_attachment" {
   description = "EKS cluster SG attached to ec2.bastionHost"
   value = module.eks-prod.cluster_primary_security_group_id
 }
+
+output "new-gl-sg-rule_sourceSG" {
+  description = "source SG of new gitLab sg-rule"
+  value = module.eks-prod.cluster_primary_security_group_id
+}

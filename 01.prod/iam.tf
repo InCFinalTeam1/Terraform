@@ -17,7 +17,7 @@ resource "aws_iam_role_policy_attachment" "karpenter_node_ebs_cni_policy" {
 ## eks-pod-app-role 생성
 # 파드에 필요한 정책 생성
 resource "aws_iam_policy" "eks_pod_policy" {
-  name        = "eks-main-pod-policy"
+  name        = "eks-pod-policy"
   description = "Policy for EKS Pods with permissions to access S3, Lambda, DynamoDB, Kinesis, ElastiCache, and API Gateway"
 
   policy = jsonencode({
@@ -41,7 +41,7 @@ resource "aws_iam_policy" "eks_pod_policy" {
 
 # 만든 정책 붙여서 역할 생성
 resource "aws_iam_role" "eks_pod_role" {
-  name               = "eks-pod-app-role_test"
+  name               = "eks-pod-app-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -53,7 +53,7 @@ resource "aws_iam_role" "eks_pod_role" {
         Action    = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${data.aws_eks_cluster.eks.identity[0].oidc[0].issuer}:aud" = "sts.amazonaws.com"
+            "${trimprefix(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://")}:aud" = "sts.amazonaws.com"
           }
         }
       }
@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "eks_pod_policy_attach" {
 
 # for Streamlit Pods' sa
 resource "aws_iam_role" "eks_dynamodb_reader" {
-  name = "eks-dynamodb-reader_test"
+  name = "eks-dynamodb-reader"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -81,7 +81,7 @@ resource "aws_iam_role" "eks_dynamodb_reader" {
         Action    = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "${data.aws_eks_cluster.eks.identity[0].oidc[0].issuer}:aud" = "sts.amazonaws.com"
+            "${trimprefix(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://")}:aud" = "sts.amazonaws.com"
           }
         }
       }

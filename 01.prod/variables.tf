@@ -15,6 +15,11 @@ variable "project_name" {
     default = "finalpj"
 }
 
+variable "route53_zone_arn" {
+    type = string
+    default = "arn:aws:route53::account-id:hostedzone/Z055454627IATSRLKVXTQ"
+}
+
 variable "vpc_cidr" {
   description = "VPC-staging CIDR Block"
   type = string
@@ -51,10 +56,10 @@ variable "AMZLX2_myRG" {
 
 variable "bh-ami" {
   type = string
-  default = "ami-0a3e00de3f673611d"
+  default = "ami-08ce926a379c14b14"
 }
 
 variable "gitlab-ami" {
   type = string
-  default = "ami-0360f4782effd9054"
+  default = "ami-0e406a85ed7c2973d"
 }

@@ -13,12 +13,12 @@ module "eks-prod" {
 
   eks_managed_node_groups = {
     system = {
-      min_size     = 1
+      min_size     = 3
       max_size     = 10
-      desired_size = 1
+      desired_size = 3
 
 #      instance_types = ["t3.medium", "t3.large", "c4.large", "c5.large"]
-      instance_types = ["t3.xlarge"]
+      instance_types = ["t3.large"]
       capacity_type  = "SPOT"
     }
   }

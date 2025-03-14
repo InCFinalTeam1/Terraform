@@ -1,5 +1,5 @@
 module "eks-prod_blueprints_addons" {
-  depends_on = [module.eks-prod]
+  depends_on = [module.eks-prod, time_sleep.wait_30s]
   source = "aws-ia/eks-blueprints-addons/aws"
   version = "~> 1.19" #ensure to update this to the latest/desired version
 
@@ -23,15 +23,23 @@ module "eks-prod_blueprints_addons" {
     }
   }
 
-  enable_aws_load_balancer_controller    = true
-#  enable_cluster_proportional_autoscaler = true
-  enable_kube_prometheus_stack           = true
-  enable_metrics_server                  = true
-  enable_external_dns                    = true
-  enable_argocd                          = true
-  enable_karpenter                       = true
-  karpenter_enable_spot_termination      = true
-#   cert_manager_route53_hosted_zone_arns = ["arn:aws:route53::227250033304:hostedzone/Z055454627IATSRLKVXTQ"]
+  enable_external_secrets                      = true
+  enable_secrets_store_csi_driver              = true
+  enable_secrets_store_csi_driver_provider_aws = true
+  enable_aws_load_balancer_controller          = true
+  enable_kube_prometheus_stack                 = true
+  enable_metrics_server                        = true
+  enable_external_dns                          = true
+  external_dns = {
+    route53_zone_arns = [var.route53_zone_arn]
+  }
+  enable_argocd                                = true
+  enable_karpenter                             = true
+  karpenter = {
+    helm_config = "0.37.0"
+  }
+  karpenter_enable_spot_termination            = true
+  enable_aws_cloudwatch_metrics                = true
 
   tags = {
     Environment = var.env
@@ -73,4 +81,10 @@ provider "helm" {
       args        = ["eks", "get-token", "--cluster-name", module.eks-prod.cluster_name]
     }
   }
+}
+
+# 클러스터 준비 대기용 리소스
+resource "time_sleep" "wait_30s" {
+  depends_on      = [module.eks-prod]
+  create_duration = "30s"
 }
